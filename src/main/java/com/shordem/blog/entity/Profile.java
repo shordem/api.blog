@@ -52,7 +52,7 @@ public class Profile extends Base implements Serializable {
     private String instagram;
 
     @NotNull
-    @OneToOne()
+    @OneToOne
     @MapsId
     @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
     private User user;
