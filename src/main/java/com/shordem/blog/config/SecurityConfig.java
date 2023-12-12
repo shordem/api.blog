@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(HttpMethod.GET, "/test/").hasRole(ERole.USER.name())
+                                .requestMatchers(HttpMethod.POST, "/tag/").hasRole(ERole.ADMIN.name())
                                 .requestMatchers("/profile/").authenticated()
                                 .anyRequest().permitAll())
                 .exceptionHandling(exception -> {
