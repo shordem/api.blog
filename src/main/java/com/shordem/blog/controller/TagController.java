@@ -51,7 +51,7 @@ public class TagController {
         tag.setName(name);
         tag.setDescription(description);
 
-        tagService.saveTag(tag);
+        tagService.save(tag);
 
         return ResponseEntity.ok().body(new MessageResponse("Tag created successfully!"));
 

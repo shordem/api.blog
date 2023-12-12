@@ -39,7 +39,7 @@ public class DatabaseMigrationRunner implements CommandLineRunner {
             user.setPassword(encoder.encode("password"));
             user.setRoles(roles);
 
-            userService.saveUser(user);
+            userService.save(user);
         }
         flyway.migrate();
     }

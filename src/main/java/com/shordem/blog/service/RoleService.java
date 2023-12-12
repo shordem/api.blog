@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class RoleService {
+public class RoleService extends BaseService<Role> {
 
     private final RoleRepository roleRepository;
 
@@ -22,7 +22,8 @@ public class RoleService {
         return roleRepository.findByName(name);
     }
 
-    public void saveRole(Role role) {
-        roleRepository.save(role);
+    @Override
+    public void save(Role entity) {
+        roleRepository.save(entity);
     }
 }

@@ -18,7 +18,7 @@ public class InitRolesConfig {
                 if (roleService.findByName(role).isEmpty()) {
                     Role newRole = new Role();
                     newRole.setName(role);
-                    roleService.saveRole(newRole);
+                    roleService.save(newRole);
                 }
             }
         };

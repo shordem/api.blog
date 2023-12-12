@@ -14,10 +14,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class UserService extends BaseService<User> {
     private final UserRepository userRepository;
 
-    public void saveUser(User user) {
+    public void save(User user) {
         userRepository.save(user);
     }
 

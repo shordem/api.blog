@@ -84,7 +84,7 @@ public class ProfileController {
         profile.setInstagram(instagram);
         profile.setUser(user);
 
-        profileService.saveProfile(profile);
+        profileService.save(profile);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Profile created successfully!"));
     }
@@ -138,7 +138,7 @@ public class ProfileController {
 
         profile.setUser(user);
 
-        profileService.saveProfile(profile);
+        profileService.save(profile);
 
         return ResponseEntity.ok().body(new MessageResponse("Profile updated successfully!"));
 

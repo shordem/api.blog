@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TagService {
+public class TagService extends BaseService<Tag> {
 
     private final TagRepository tagRepository;
 
@@ -19,8 +19,8 @@ public class TagService {
         return tagRepository.findBySlug(slug).isPresent();
     }
 
-    public void saveTag(Tag tag) {
-        tagRepository.save(tag);
+    public void save(Tag entity) {
+        tagRepository.save(entity);
     }
 
     public Tag findBySlug(String slug) {

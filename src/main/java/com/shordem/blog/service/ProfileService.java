@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ProfileService {
+public class ProfileService extends BaseService<Profile> {
 
     private final ProfileRepository profileRepository;
 
@@ -22,8 +22,9 @@ public class ProfileService {
         return profileRepository.findByUserId(userId);
     }
 
-    public void saveProfile(Profile profile) {
-        profileRepository.save(profile);
+    @Override
+    public void save(Profile entity) {
+        profileRepository.save(entity);
     }
 
     public Boolean existsByUserId(UUID userId) {
