@@ -50,8 +50,8 @@ public class ProfileController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> doCreateProfile(@RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName,
+    public ResponseEntity<?> doCreateProfile(@RequestParam("firstname") String firstName,
+            @RequestParam("lastname") String lastName,
             @RequestParam("bio") String bio,
             @RequestParam("website") String website,
             @RequestParam("mail") String mail,
