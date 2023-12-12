@@ -2,7 +2,7 @@
 
 ## Description
 
-Welcome to Shordem, a powerful and customizable open-source blogging platform. This platform empowers users to create, share, and discover engaging content. Below is an overview of key features and information to get you started. [Click here](https://shordem.herokuapp.com/) to read the full description.
+Welcome to Shordem, a powerful and customizable open-source blogging platform. This platform empowers users to create, share, and discover engaging content. Below is an overview of key features and information to get you started. [Click here](https://docs.google.com/document/d/1LO5vbJ57oyOk82_6HalkD5Sim8SQtKBwsIXMAMYTruw/edit?usp=sharing) to read the full description.
 
 ## API Documentation
 
