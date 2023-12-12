@@ -40,6 +40,7 @@ public class AuthController {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
+    // FIXME: only admin should be able to register a user with admin role
     @PostMapping("/register/")
     public ResponseEntity<?> doRegister(@Valid @RequestBody RegisterRequest registerRequest) {
         String username = registerRequest.getUsername();
