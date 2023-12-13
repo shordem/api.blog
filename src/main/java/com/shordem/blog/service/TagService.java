@@ -3,6 +3,7 @@ package com.shordem.blog.service;
 import org.springframework.stereotype.Service;
 
 import com.shordem.blog.entity.Tag;
+import com.shordem.blog.exception.EntityNotFoundException;
 import com.shordem.blog.repository.TagRepository;
 
 import jakarta.transaction.Transactional;
@@ -24,7 +25,7 @@ public class TagService extends BaseService<Tag> {
     }
 
     public Tag findBySlug(String slug) {
-        return tagRepository.findBySlug(slug).orElse(null);
+        return tagRepository.findBySlug(slug).orElseThrow(() -> new EntityNotFoundException());
     }
 
     public Iterable<Tag> findAll() {
