@@ -6,9 +6,12 @@ import java.util.List;
 
 import com.shordem.blog.utils.StringHelper;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -39,7 +42,8 @@ public class Tag extends Base implements Serializable {
     @Column
     private String image;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinTable(name = "posts_tags", joinColumns = @JoinColumn(name = "post_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false))
     private List<Post> posts = new ArrayList<>();
 
     @PrePersist
