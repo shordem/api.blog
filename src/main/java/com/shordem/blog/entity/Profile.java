@@ -5,7 +5,6 @@ import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -53,7 +52,6 @@ public class Profile extends Base implements Serializable {
 
     @NotNull
     @OneToOne
-    @MapsId
     @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
     private User user;
 }

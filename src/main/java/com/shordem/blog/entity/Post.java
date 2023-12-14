@@ -37,7 +37,6 @@ public class Post extends Base implements Serializable {
 
     @NotNull
     @ManyToOne
-    // @MapsId
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
