@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shordem.blog.entity.Tag;
+import com.shordem.blog.entity.User;
 import com.shordem.blog.payload.request.TagRequest;
 import com.shordem.blog.payload.response.MessageResponse;
 import com.shordem.blog.service.TagService;
+import com.shordem.blog.service.UserDetailsService;
 import com.shordem.blog.utils.StringHelper;
 
 import jakarta.validation.Valid;
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class TagController {
 
     private final TagService tagService;
+    private final UserDetailsService userDetailsService;
 
     @GetMapping
     public ResponseEntity<?> doGetTags() {
@@ -41,6 +44,8 @@ public class TagController {
         String name = tagRequest.getName();
         String description = tagRequest.getDescription();
 
+        User user = userDetailsService.getAuthenticatedUser();
+
         String slug = StringHelper.slugify(name);
 
         if (tagService.existsBySlug(slug)) {
@@ -50,6 +55,7 @@ public class TagController {
         Tag tag = new Tag();
         tag.setName(name);
         tag.setDescription(description);
+        tag.setCreatedBy(user.getId());
 
         tagService.save(tag);
 

@@ -1,11 +1,8 @@
 package com.shordem.blog.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,7 +17,7 @@ import com.shordem.blog.entity.User;
 import com.shordem.blog.payload.response.MessageResponse;
 import com.shordem.blog.service.AwsS3Service;
 import com.shordem.blog.service.ProfileService;
-import com.shordem.blog.service.UserService;
+import com.shordem.blog.service.UserDetailsService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,19 +26,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/profile/")
 public class ProfileController {
 
-    @Autowired
-    private AwsS3Service awsS3Service;
-
+    private final AwsS3Service awsS3Service;
     private final ProfileService profileService;
-    private final UserService userService;
+    private final UserDetailsService userDetailsService;
 
     @GetMapping
     public ResponseEntity<?> getProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+        User user = userDetailsService.getAuthenticatedUser();
 
         Profile profile = profileService.findByUserId(user.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("Profile Not Found with user id: " + user.getId()));
@@ -59,11 +50,8 @@ public class ProfileController {
             @RequestParam("facebook") String facebook,
             @RequestParam("instagram") String instagram,
             @RequestParam("avatar") MultipartFile file) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
+        User user = userDetailsService.getAuthenticatedUser();
         Boolean profileCheck = profileService.existsByUserId(user.getId());
 
         if (profileCheck) {
@@ -83,6 +71,7 @@ public class ProfileController {
         profile.setFacebook(facebook);
         profile.setInstagram(instagram);
         profile.setUser(user);
+        profile.setCreatedBy(user.getId());
 
         profileService.save(profile);
 
@@ -99,11 +88,8 @@ public class ProfileController {
             @RequestParam(name = "facebook", required = false) String facebook,
             @RequestParam(name = "instagram", required = false) String instagram,
             @RequestParam(name = "avatar", required = false) MultipartFile file) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
+        User user = userDetailsService.getAuthenticatedUser();
         Profile profile = profileService.findByUserId(user.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("Profile Not Found with user id: " + user.getId()));
 
@@ -137,6 +123,7 @@ public class ProfileController {
         }
 
         profile.setUser(user);
+        profile.setUpdatedBy(user.getUpdatedBy());
 
         profileService.save(profile);
 
