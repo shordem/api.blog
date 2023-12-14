@@ -36,6 +36,7 @@ public abstract class Base {
     @Column(name = "deleted_at", nullable = true, columnDefinition = "TIMESTAMP")
     private Instant deletedAt;
 
+    // FIXME: use User and not UUID, and use @OneToOne
     @CreatedBy
     @Column(name = "created_by", nullable = true)
     private UUID createdBy;
