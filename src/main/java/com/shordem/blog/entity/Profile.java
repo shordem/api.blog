@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -50,8 +48,4 @@ public class Profile extends Base implements Serializable {
     @Column(name = "instagram", length = 64)
     private String instagram;
 
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
-    private User user;
 }
