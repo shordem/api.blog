@@ -23,12 +23,7 @@ public class Comment extends Base implements Serializable {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
-    private User user;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     @Column(name = "content", nullable = false, length = 512)
