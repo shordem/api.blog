@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.shordem.blog.utils.StringHelper;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,10 +14,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -64,21 +60,8 @@ public class Post extends Base implements Serializable {
 
     @PrePersist
     public void preCreate() {
-        slugifyIfEmptySlug();
         if (publishOn == null || publishOn.isAfter(ZonedDateTime.now()))
             publishOn = ZonedDateTime.now();
     }
 
-    @PreUpdate
-    public void preUpdateEntity() {
-        slugifyIfEmptySlug();
-    }
-
-    private void slugifyIfEmptySlug() {
-        if (StringHelper.isEmpty(getSlug()))
-            setSlug(StringHelper.slugify(getTitle()));
-
-        if (publishOn == null || publishOn.isAfter(ZonedDateTime.now()))
-            publishOn = ZonedDateTime.now();
-    }
 }
