@@ -35,11 +35,6 @@ import lombok.Setter;
 @Table(name = "posts")
 public class Post extends Base implements Serializable {
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "posts_tags", joinColumns = @JoinColumn(name = "post_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false))
     private Set<Tag> tags = new HashSet<>();
