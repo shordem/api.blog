@@ -16,6 +16,10 @@ public class TagService extends BaseService<Tag> {
 
     private final TagRepository tagRepository;
 
+    private TagDto convertToDto(Tag tag) {
+        return new TagDto(tag.getName(), tag.getSlug());
+    }
+
     public Boolean existsBySlug(String slug) {
         return tagRepository.findBySlug(slug).isPresent();
     }
