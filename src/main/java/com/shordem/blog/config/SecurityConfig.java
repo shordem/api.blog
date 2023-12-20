@@ -64,7 +64,8 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers(HttpMethod.GET, "/test/").hasRole(ERole.USER.name())
                                 .requestMatchers(HttpMethod.POST, "/tag/").hasRole(ERole.ADMIN.name())
-                                .requestMatchers("/profile/").authenticated()
+                                .requestMatchers("/profile/").hasRole(ERole.USER.name())
+                                .requestMatchers("/post/").hasRole(ERole.USER.name())
                                 .anyRequest().permitAll())
                 .exceptionHandling(exception -> {
                     exception.authenticationEntryPoint(unauthorizedHandler);
