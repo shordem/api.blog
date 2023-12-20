@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.shordem.blog.dto.ProfileDto;
 import com.shordem.blog.entity.Profile;
 import com.shordem.blog.entity.User;
 import com.shordem.blog.payload.response.MessageResponse;
@@ -34,7 +35,7 @@ public class ProfileController {
     public ResponseEntity<?> getProfile() {
         User user = userDetailsService.getAuthenticatedUser();
 
-        Profile profile = profileService.findByUserId(user.getId())
+        ProfileDto profile = profileService.findByUserId(user.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("Profile Not Found with user id: " + user.getId()));
 
         return ResponseEntity.ok().body(profile);
@@ -89,7 +90,7 @@ public class ProfileController {
             @RequestParam(name = "avatar", required = false) MultipartFile file) {
 
         User user = userDetailsService.getAuthenticatedUser();
-        Profile profile = profileService.findByUserId(user.getId())
+        Profile profile = profileService.findByUserIdEntity(user.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("Profile Not Found with user id: " + user.getId()));
 
         if (firstName != null) {
