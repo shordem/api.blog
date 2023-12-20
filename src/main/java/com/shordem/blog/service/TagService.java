@@ -1,7 +1,11 @@
 package com.shordem.blog.service;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
+import com.shordem.blog.dto.TagDto;
 import com.shordem.blog.entity.Tag;
 import com.shordem.blog.exception.EntityNotFoundException;
 import com.shordem.blog.repository.TagRepository;
@@ -28,11 +32,17 @@ public class TagService extends BaseService<Tag> {
         tagRepository.save(entity);
     }
 
-    public Tag findBySlug(String slug) {
-        return tagRepository.findBySlug(slug).orElseThrow(() -> new EntityNotFoundException());
+    public TagDto findBySlug(String slug) {
+        Tag tag = tagRepository.findBySlug(slug).orElseThrow(() -> new EntityNotFoundException());
+        return convertToDto(tag);
     }
 
-    public Iterable<Tag> findAll() {
-        return tagRepository.findAll();
+    public Set<Tag> findAllBySlugIn(String[] tags) {
+        return tagRepository.findAllBySlugIn(tags);
+    }
+
+    public List<TagDto> findAll() {
+        return tagRepository.findAllByOrderByCreatedAtDesc().stream().map(this::convertToDto)
+                .toList();
     }
 }
