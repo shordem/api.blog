@@ -1,11 +1,17 @@
 package com.shordem.blog.service;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.shordem.blog.dto.ProfileDto;
+import com.shordem.blog.dto.RoleDto;
+import com.shordem.blog.dto.UserDto;
 import com.shordem.blog.entity.Profile;
+import com.shordem.blog.entity.User;
 import com.shordem.blog.repository.ProfileRepository;
 
 import jakarta.transaction.Transactional;
@@ -44,6 +50,6 @@ public class ProfileService extends BaseService<Profile> {
     }
 
     public Boolean existsByUserId(UUID userId) {
-        return profileRepository.existsByUserId(userId);
+        return profileRepository.existsByCreatedById(userId);
     }
 }
