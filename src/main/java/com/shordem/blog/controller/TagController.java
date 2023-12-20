@@ -55,7 +55,7 @@ public class TagController {
         Tag tag = new Tag();
         tag.setName(name);
         tag.setDescription(description);
-        tag.setCreatedBy(user.getId());
+        tag.setCreatedBy(user);
 
         tagService.save(tag);
 
