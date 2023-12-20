@@ -18,8 +18,24 @@ public class ProfileService extends BaseService<Profile> {
 
     private final ProfileRepository profileRepository;
 
-    public Optional<Profile> findByUserId(UUID userId) {
-        return profileRepository.findByUserId(userId);
+    private ProfileDto convertToDto(Profile profile) {
+        User user = profile.getCreatedBy();
+        Set<RoleDto> roles = user.getRoles().stream().map(role -> new RoleDto(role.getName()))
+                .collect(Collectors.toSet());
+
+        UserDto createdBy = new UserDto(profile.getCreatedBy().getUsername(), profile.getCreatedBy().getEmail(), roles);
+
+        return new ProfileDto(profile.getFirstName(), profile.getLastName(), profile.getBio(), profile.getAvatar(),
+                profile.getWebsite(), profile.getMail(), profile.getX(), profile.getFacebook(), profile.getInstagram(),
+                createdBy);
+    }
+
+    public Optional<ProfileDto> findByUserId(UUID userId) {
+        return profileRepository.findByCreatedById(userId).map(this::convertToDto);
+    }
+
+    public Optional<Profile> findByUserIdEntity(UUID userId) {
+        return profileRepository.findByCreatedById(userId);
     }
 
     @Override
