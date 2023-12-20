@@ -1,5 +1,7 @@
 package com.shordem.blog.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shordem.blog.dto.TagDto;
 import com.shordem.blog.entity.Tag;
 import com.shordem.blog.entity.User;
 import com.shordem.blog.payload.request.TagRequest;
@@ -29,13 +32,13 @@ public class TagController {
 
     @GetMapping
     public ResponseEntity<?> doGetTags() {
-        Iterable<Tag> tag = tagService.findAll();
+        List<TagDto> tag = tagService.findAll();
         return ResponseEntity.ok().body(tag);
     }
 
     @GetMapping("/{slug}/")
     public ResponseEntity<?> doGetTagBySlug(@PathVariable("slug") String slug) {
-        Tag tag = tagService.findBySlug(slug);
+        TagDto tag = tagService.findBySlug(slug);
         return ResponseEntity.ok().body(tag);
     }
 
