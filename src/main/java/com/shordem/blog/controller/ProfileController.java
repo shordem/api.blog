@@ -70,8 +70,7 @@ public class ProfileController {
         profile.setX(x);
         profile.setFacebook(facebook);
         profile.setInstagram(instagram);
-        profile.setUser(user);
-        profile.setCreatedBy(user.getId());
+        profile.setCreatedBy(user);
 
         profileService.save(profile);
 
@@ -122,8 +121,7 @@ public class ProfileController {
             profile.setAvatar(fileKey);
         }
 
-        profile.setUser(user);
-        profile.setUpdatedBy(user.getUpdatedBy());
+        profile.setUpdatedBy(user);
 
         profileService.save(profile);
 
