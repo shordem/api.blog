@@ -9,7 +9,7 @@ import com.shordem.blog.entity.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile, UUID> {
 
-    Optional<Profile> findByUserId(UUID user);
+    Optional<Profile> findByCreatedById(UUID user);
 
-    Boolean existsByUserId(UUID userId);
+    Boolean existsByCreatedById(UUID user);
 }
