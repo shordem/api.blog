@@ -2,7 +2,10 @@ package com.shordem.blog.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,55 +22,39 @@ import com.shordem.blog.payload.request.CommentRequest;
 import com.shordem.blog.payload.request.PostRequest;
 import com.shordem.blog.payload.response.MessageResponse;
 import com.shordem.blog.service.CommentService;
-import com.shordem.blog.service.LikeService;
 import com.shordem.blog.service.PostService;
-import com.shordem.blog.service.TagService;
 import com.shordem.blog.service.UserDetailsService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Controller
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/post/")
 public class PostController {
 
-    private final TagService tagService;
     private final PostService postService;
-    private final LikeService likeService;
     private final CommentService commentService;
     private final UserDetailsService userDetailsService;
 
     @GetMapping
-    public ResponseEntity<?> doGetPosts() {
-        return ResponseEntity.ok().body(postService.findAll());
+    public ResponseEntity<Page<PostDto>> doGetPosts(Pageable pageable) {
+        return ResponseEntity.ok().body(postService.findAll(pageable));
     }
 
     @GetMapping("/{slug}/")
-    public ResponseEntity<?> doGetPostBySlug(@PathVariable("slug") String slug) {
+    public ResponseEntity<PostDto> doGetPostBySlug(@PathVariable("slug") String slug) {
         PostDto post = postService.findBySlug(slug);
 
         return ResponseEntity.ok().body(post);
     }
 
     @PostMapping
-    public ResponseEntity<?> doCreatePost(@Valid @RequestBody PostRequest postRequest) {
+    public ResponseEntity<MessageResponse> doCreatePost(@Valid @RequestBody PostRequest postRequest) {
         User user = userDetailsService.getAuthenticatedUser();
 
-        String title = postRequest.getTitle();
-        String content = postRequest.getContent();
-        String[] tags = postRequest.getTags();
-
-        System.out.println(tagService.findAllBySlugIn(tags) + "these are the tags");
-
-        Post post = new Post();
-
-        post.setTitle(title);
-        post.setContent(content);
-        post.setTags(tagService.findAllBySlugIn(tags));
-        post.setCreatedBy(user);
-
-        postService.save(post);
+        postService.createBlog(postRequest, user);
 
         return ResponseEntity.ok().body(new MessageResponse("Post created"));
     }
