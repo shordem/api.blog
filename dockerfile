@@ -5,6 +5,7 @@ LABEL author="Horlakz"
 WORKDIR /app
 
 COPY target/*.jar /app/app.jar
+COPY .env  /app/.env
 
 # RUN ./mvnw clean package
 
