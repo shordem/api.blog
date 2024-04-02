@@ -31,6 +31,10 @@ jobs:
           envkey_AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
           envkey_AWS_BASE_FOLDER: ${{ secrets.AWS_BASE_FOLDER }}
 
+      - name: build spring boot
+        run: |
+          ./mvnw clean package
+
       - name: Build Docker images
         run: |
           docker build . -t shordem-blog-api:${{ github.sha }}
