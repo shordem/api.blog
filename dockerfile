@@ -4,10 +4,10 @@ LABEL author="Horlakz"
 
 WORKDIR /app
 
-COPY . .
+COPY target/*.jar /app/app.jar
 
-RUN ./mvnw clean package
+# RUN ./mvnw clean package
 
 EXPOSE 8000
 
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "app.jar"]
