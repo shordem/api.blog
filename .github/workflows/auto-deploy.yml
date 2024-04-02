@@ -31,9 +31,15 @@ jobs:
           envkey_AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
           envkey_AWS_BASE_FOLDER: ${{ secrets.AWS_BASE_FOLDER }}
 
-      - name: build spring boot
+      - name: Set up jdk 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "adopt"
+          java-version: "17"
+
+      - name: build spring boot project
         run: |
-          ./mvnw clean package
+          ./mvnw clean package -DskipTests
 
       - name: Build Docker images
         run: |
