@@ -1,0 +1,50 @@
+name: Deploy to Ubuntu Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Generate .env file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+          envkey_PORT: ${{ secrets.PORT }}
+          envkey_DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+          envkey_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          envkey_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          envkey_DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          envkey_DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          envkey_JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION_MS }}
+          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          envkey_AWS_REGION: ${{ secrets.AWS_REGION }}
+          envkey_AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+          envkey_AWS_BASE_FOLDER: ${{ secrets.AWS_BASE_FOLDER }}
+
+      - name: Build Docker images
+        run: |
+          docker build . -t shodem-blog-api:${{ github.sha }}
+
+  run:
+    runs-on: self-hosted
+
+    needs:
+      - build
+
+    steps:
+      - name: remove old container
+        run: |
+          docker rm --force shodem-blog-api
+
+      - name: run new container
+        run: |
+          docker run -d --restart unless-stopped --name shodem-blog-api -p 2000:8000 shodem-blog-api:${{ github.sha }}
