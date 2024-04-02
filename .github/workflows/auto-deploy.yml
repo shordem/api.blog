@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker build . -t shodem-blog-api:${{ github.sha }}
+          docker build . -t shordem-blog-api:${{ github.sha }}
 
   run:
     runs-on: self-hosted
@@ -44,8 +44,8 @@ jobs:
     steps:
       - name: remove old container
         run: |
-          docker rm --force shodem-blog-api
+          docker rm --force shordem-blog-api
 
       - name: run new container
         run: |
-          docker run -d --restart unless-stopped --name shodem-blog-api -p 2000:8000 shodem-blog-api:${{ github.sha }}
+          docker run -d --restart unless-stopped --name shordem-blog-api -p 2000:8000 shordem-blog-api:${{ github.sha }}
