@@ -17,6 +17,7 @@ jobs:
         with:
           envkey_CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
           envkey_PORT: ${{ secrets.PORT }}
+          envkey_LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
           envkey_DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
           envkey_DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           envkey_DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
