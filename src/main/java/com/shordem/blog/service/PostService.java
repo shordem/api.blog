@@ -32,7 +32,8 @@ public class PostService {
 
     private PostDto convertToDto(Post post) {
         Set<Tag> tags = post.getTags();
-        TagDto[] tagDtos = tags.stream().map(tag -> new TagDto(tag.getName(), tag.getSlug()))
+        TagDto[] tagDtos = tags.stream()
+                .map(tag -> new TagDto(tag.getName(), tag.getSlug(), tag.getImage(), tag.getDescription()))
                 .toArray(TagDto[]::new);
 
         return new PostDto(post.getSlug(), post.getTitle(), post.getContent(), tagDtos);
