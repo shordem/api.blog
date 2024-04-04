@@ -6,9 +6,7 @@ import lombok.Data;
 public class TagDto {
     private String name;
     private String slug;
+    private String image;
+    private String description;
 
-    public TagDto(String name, String slug) {
-        this.name = name;
-        this.slug = slug;
-    }
 }
