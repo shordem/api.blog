@@ -64,6 +64,7 @@ public class DatabaseMigrationRunner implements CommandLineRunner {
             user.setEmail("shordem@gmail.com");
             user.setUsername("admin");
             user.setPassword(encoder.encode("password"));
+            user.setIsEmailVerified(true);
             user.setRoles(roles);
 
             this.userService.save(user);
