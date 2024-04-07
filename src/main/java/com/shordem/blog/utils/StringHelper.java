@@ -19,4 +19,12 @@ public class StringHelper extends StringUtils {
         return slug.toLowerCase(Locale.ENGLISH);
     }
 
+    public static String otpGenerator() {
+        String otp = "";
+        for (int i = 0; i < 6; i++) {
+            otp += (int) (Math.random() * 10);
+        }
+        return otp;
+    }
+
 }
