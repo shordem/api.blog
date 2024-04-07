@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.shordem.blog.entity.User;
+import com.shordem.blog.exception.EntityNotFoundException;
 import com.shordem.blog.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -31,6 +32,15 @@ public class UserService extends BaseService<User> {
 
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmailAndDeletedAtIsNull(email)
+                .orElseThrow(() -> new EntityNotFoundException(email + " not found"));
+    }
+
+    public Boolean userIsVerified(String email) {
+        return findByEmail(email).getIsEmailVerified();
     }
 
     public Optional<User> findById(UUID userId) {
