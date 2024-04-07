@@ -40,6 +40,10 @@ public class User extends Base implements Serializable {
     @Size(min = 1, max = 64)
     private String password;
 
+    @Column(name = "is_email_verified", nullable = false)
+    @NotNull
+    private Boolean isEmailVerified;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
