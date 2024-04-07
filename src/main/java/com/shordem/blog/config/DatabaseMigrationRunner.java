@@ -33,10 +33,11 @@ public class DatabaseMigrationRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        this.initRoles();
-        this.initAdmin();
 
         flyway.migrate();
+
+        this.initRoles();
+        this.initAdmin();
     }
 
     public void initRoles() {
