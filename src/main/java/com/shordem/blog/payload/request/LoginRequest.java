@@ -1,18 +1,13 @@
 package com.shordem.blog.payload.request;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class LoginRequest {
 
     @NotBlank
-    private String username;
+    private String email;
 
     @NotBlank
     private String password;
