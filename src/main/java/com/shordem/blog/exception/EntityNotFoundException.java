@@ -1,7 +1,11 @@
 package com.shordem.blog.exception;
 
-public class EntityNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    // private static final UUID serialVersionUID =
-    // UUID.fromString("e0b2b2e0-0b2b-0e0b-b2b0-0b2e0b2b0e0b");
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class EntityNotFoundException extends RuntimeException {
+    public EntityNotFoundException(String message) {
+        super(message);
+    }
 }
