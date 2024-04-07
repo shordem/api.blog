@@ -12,6 +12,8 @@ public interface UserRepository extends BaseRepository<User, UUID> {
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByEmailAndDeletedAtIsNull(String email);
+
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
