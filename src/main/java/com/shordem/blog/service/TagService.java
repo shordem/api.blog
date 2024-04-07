@@ -33,7 +33,8 @@ public class TagService extends BaseService<Tag> {
     }
 
     public TagDto findBySlug(String slug) {
-        Tag tag = tagRepository.findBySlug(slug).orElseThrow(() -> new EntityNotFoundException("Tag not found"));
+        Tag tag = tagRepository.findBySlug(slug)
+                .orElseThrow(() -> new EntityNotFoundException(slug + " Tag not found"));
         return convertToDto(tag);
     }
 
