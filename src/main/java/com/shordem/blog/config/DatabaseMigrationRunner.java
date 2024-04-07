@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import com.shordem.blog.entity.ERole;
 import com.shordem.blog.entity.Role;
 import com.shordem.blog.entity.User;
+import com.shordem.blog.exception.EntityNotFoundException;
+import com.shordem.blog.service.RoleService;
 import com.shordem.blog.service.UserService;
 
 @Component
@@ -24,24 +26,48 @@ public class DatabaseMigrationRunner implements CommandLineRunner {
     private UserService userService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private PasswordEncoder encoder;
 
     @Override
     public void run(String... args) throws Exception {
-        if (!userService.findByUsername("admin").isPresent()) {
+        this.initRoles();
+        this.initAdmin();
+
+        flyway.migrate();
+    }
+
+    public void initRoles() {
+
+        for (ERole role : ERole.values()) {
+            if (this.roleService.findByName(role).isEmpty()) {
+                Role newRole = new Role();
+                newRole.setName(role);
+                this.roleService.save(newRole);
+            }
+        }
+
+    }
+
+    public void initAdmin() {
+
+        if (!this.userService.findByUsername("admin").isPresent()) {
             Set<Role> roles = new HashSet<>();
 
-            roles.add(new Role(ERole.ADMIN));
+            roles.add(roleService.findByName(ERole.ADMIN)
+                    .orElseThrow(() -> new EntityNotFoundException("Admin Role not found")));
 
             User user = new User();
-            user.setEmail("shordemmedia@gmail.com");
+            user.setEmail("shordem@gmail.com");
             user.setUsername("admin");
             user.setPassword(encoder.encode("password"));
             user.setRoles(roles);
 
-            userService.save(user);
+            this.userService.save(user);
         }
-        flyway.migrate();
+
     }
 
 }
