@@ -73,11 +73,12 @@ public class PostService {
     }
 
     public PostDto findBySlug(String slug) {
-        return postRepository.findBySlug(slug).map(this::convertToDto).orElseThrow(() -> new EntityNotFoundException());
+        return postRepository.findBySlug(slug).map(this::convertToDto)
+                .orElseThrow(() -> new EntityNotFoundException(slug + " not found"));
     }
 
     public Post findBySlugEntity(String slug) {
-        return postRepository.findBySlug(slug).orElseThrow(() -> new EntityNotFoundException());
+        return postRepository.findBySlug(slug).orElseThrow(() -> new EntityNotFoundException(slug + " not found"));
     }
 
     public boolean existsBySlug(String slug) {

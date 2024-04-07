@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shordem.blog.entity.ERole;
 import com.shordem.blog.entity.Role;
 import com.shordem.blog.entity.User;
-import com.shordem.blog.exception.RoleException;
+import com.shordem.blog.exception.EntityNotFoundException;
 import com.shordem.blog.payload.request.LoginRequest;
 import com.shordem.blog.payload.request.RegisterRequest;
 import com.shordem.blog.payload.response.JwtResponse;
@@ -72,7 +72,7 @@ public class AuthController {
                             adminRole = new Role(ERole.ADMIN);
                         } else {
                             adminRole = roleService.findByName(ERole.ADMIN)
-                                    .orElseThrow(() -> new RoleException("Error: Admin Role is not found."));
+                                    .orElseThrow(() -> new EntityNotFoundException("Error: Admin Role is not found."));
                         }
 
                         roles.add(adminRole);
@@ -84,7 +84,7 @@ public class AuthController {
                             userRole = new Role(ERole.USER);
                         } else {
                             userRole = roleService.findByName(ERole.USER)
-                                    .orElseThrow(() -> new RoleException("Error: User Role is not found."));
+                                    .orElseThrow(() -> new EntityNotFoundException("Error: User Role is not found."));
                         }
 
                         roles.add(userRole);
