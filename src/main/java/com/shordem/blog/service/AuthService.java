@@ -59,7 +59,7 @@ public class AuthService {
         context.setVariable("code", code);
         context.setVariable("name", user.getUsername());
 
-        emailService.sendMail(user.getEmail(), subject, templateName, context);
+        emailService.sendMail("info@enetworkspay.com", user.getEmail(), subject, templateName, context);
     }
 
     private Code getCodeEntity(String code) throws EntityNotFoundException {

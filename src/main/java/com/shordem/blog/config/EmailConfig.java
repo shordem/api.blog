@@ -1,7 +1,6 @@
 package com.shordem.blog.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,11 +17,8 @@ public class EmailConfig {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("${spring.mail.username}")
-    private String sender;
-
     @Bean
     public EmailService emailService() {
-        return new EmailService(javaMailSender, templateEngine, sender);
+        return new EmailService(javaMailSender, templateEngine);
     }
 }

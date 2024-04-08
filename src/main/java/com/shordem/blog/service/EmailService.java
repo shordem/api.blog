@@ -12,16 +12,15 @@ import jakarta.mail.internet.MimeMessage;
 public class EmailService {
     private JavaMailSender javaMailSender;
     private TemplateEngine templateEngine;
-    private String sender;
 
     @Autowired
-    public EmailService(JavaMailSender javaMailSender, TemplateEngine templateEngine, String sender) {
+    public EmailService(JavaMailSender javaMailSender, TemplateEngine templateEngine) {
         this.javaMailSender = javaMailSender;
         this.templateEngine = templateEngine;
-        this.sender = sender;
     }
 
-    public void sendMail(String to, String subject, String templateName, Context context) throws MessagingException {
+    public void sendMail(String sender, String to, String subject, String templateName, Context context)
+            throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
