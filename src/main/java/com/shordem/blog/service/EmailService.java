@@ -23,10 +23,11 @@ public class EmailService {
             throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+        String from = "<" + sender + "> Shordem Blog";
 
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setFrom(sender);
+        helper.setFrom(from);
 
         String html = templateEngine.process(templateName, context);
         helper.setText(html, true);
