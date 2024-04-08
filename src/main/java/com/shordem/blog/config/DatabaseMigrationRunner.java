@@ -34,42 +34,81 @@ public class DatabaseMigrationRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        flyway.migrate();
+        try {
+            flyway.migrate();
 
-        this.initRoles();
-        this.initAdmin();
+            this.initRoles();
+            this.initializeAdminUser();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
+        }
     }
 
     public void initRoles() {
 
-        for (ERole role : ERole.values()) {
-            if (this.roleService.findByName(role).isEmpty()) {
-                Role newRole = new Role();
-                newRole.setName(role);
-                this.roleService.save(newRole);
+        try {
+            for (ERole role : ERole.values()) {
+                this.saveRoleIfNotExists(role);
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
+    private void initializeAdminUser() {
+
+        String adminUsername = "admin";
+        String adminEmail = "shordem@email.com";
+        String adminPassword = "password";
+
+        if (userExists(adminUsername) == false) {
+
+            Set<Role> roles = new HashSet<>();
+
+            Role adminRole = getAdminRole();
+
+            roles.add(adminRole);
+
+            User admin = new User();
+            admin.setUsername(adminUsername);
+            admin.setEmail(adminEmail);
+            admin.setPassword(encodePassword(adminPassword));
+            admin.setIsEmailVerified(true);
+            // admin.setRoles(roles);
+
+            // userService.save(admin, roles);
+
         }
 
     }
 
-    public void initAdmin() {
+    private boolean userExists(String username) {
+        return this.userService.existsByUsername(username);
+    }
 
-        if (!this.userService.findByUsername("admin").isPresent()) {
-            Set<Role> roles = new HashSet<>();
+    private Role getAdminRole() {
 
-            roles.add(roleService.findByName(ERole.ADMIN)
-                    .orElseThrow(() -> new EntityNotFoundException("Admin Role not found")));
+        return roleService.findByName(ERole.ADMIN)
+                .orElseThrow(() -> new EntityNotFoundException("Admin role not found"));
 
-            User user = new User();
-            user.setEmail("shordem@gmail.com");
-            user.setUsername("admin");
-            user.setPassword(encoder.encode("password"));
-            user.setIsEmailVerified(true);
-            user.setRoles(roles);
+    }
 
-            this.userService.save(user);
+    private String encodePassword(String password) {
+        return encoder.encode(password);
+    }
+
+    private void saveRoleIfNotExists(ERole role) {
+
+        if (roleService.findByName(role).isEmpty()) {
+
+            Role newRole = new Role();
+            newRole.setName(role);
+
+            roleService.save(newRole);
+
         }
-
     }
 
 }
