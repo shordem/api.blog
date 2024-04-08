@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
-import com.shordem.blog.config.EmailConfig;
 import com.shordem.blog.entity.Code;
 import com.shordem.blog.entity.ERole;
 import com.shordem.blog.entity.Role;
@@ -19,7 +18,6 @@ import com.shordem.blog.entity.User;
 import com.shordem.blog.exception.EntityNotFoundException;
 import com.shordem.blog.repository.CodeRepository;
 import com.shordem.blog.repository.RoleRepository;
-import com.shordem.blog.repository.UserRepository;
 import com.shordem.blog.utils.JwtUtils;
 import com.shordem.blog.utils.StringHelper;
 
@@ -32,14 +30,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
     private final CodeRepository codeRepository;
     private final RoleRepository roleRepository;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder encoder;
-    private final EmailConfig emailConfig;
+    private final EmailService emailService;
 
     private String generateCode(User user) {
         Code code = new Code();
@@ -62,7 +59,7 @@ public class AuthService {
         context.setVariable("code", code);
         context.setVariable("name", user.getUsername());
 
-        emailConfig.sendMail(user.getEmail(), subject, templateName, context);
+        emailService.sendMail(user.getEmail(), subject, templateName, context);
     }
 
     private Code getCodeEntity(String code) throws EntityNotFoundException {
@@ -102,9 +99,9 @@ public class AuthService {
         user.setIsEmailVerified(false);
         user.setRoles(roles);
 
-        userRepository.save(user);
+        userService.save(user);
 
-        User userEntity = userRepository.findByUsername(username).get();
+        User userEntity = userService.findByUsername(username).get();
 
         String code = generateCode(userEntity);
         sendMail(code, user, "confirm-email", "Confirm Your Email");
@@ -137,7 +134,7 @@ public class AuthService {
 
         User user = codeEntity.getUser();
         user.setIsEmailVerified(true);
-        userRepository.save(user);
+        userService.save(user);
 
         codeEntity.delete();
         codeRepository.save(codeEntity);
@@ -160,7 +157,7 @@ public class AuthService {
         }
 
         user.setPassword(encoder.encode(password));
-        userRepository.save(user);
+        userService.save(user);
 
         codeEntity.delete();
         codeRepository.save(codeEntity);
