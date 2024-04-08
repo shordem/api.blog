@@ -76,9 +76,9 @@ public class DatabaseMigrationRunner implements CommandLineRunner {
             admin.setEmail(adminEmail);
             admin.setPassword(encodePassword(adminPassword));
             admin.setIsEmailVerified(true);
-            // admin.setRoles(roles);
+            admin.setRoles(roles);
 
-            // userService.save(admin, roles);
+            userService.save(admin);
 
         }
 
