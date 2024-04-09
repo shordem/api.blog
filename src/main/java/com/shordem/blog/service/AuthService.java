@@ -37,6 +37,7 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final PasswordEncoder encoder;
     private final EmailService emailService;
+    private final String sender = "shordem@horlakz.com";
 
     private String generateCode(User user) {
         Code code = new Code();
@@ -59,7 +60,7 @@ public class AuthService {
         context.setVariable("code", code);
         context.setVariable("name", user.getUsername());
 
-        emailService.sendMail("info@enetworkspay.com", user.getEmail(), subject, templateName, context);
+        emailService.sendMail(this.sender, user.getEmail(), subject, templateName, context);
     }
 
     private Code getCodeEntity(String code) throws EntityNotFoundException {
