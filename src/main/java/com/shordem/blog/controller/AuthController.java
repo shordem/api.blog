@@ -72,11 +72,11 @@ public class AuthController {
     public ResponseEntity<?> doResendVerificationEmail(@Valid @RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
 
-        if (userService.userIsVerified(email)) {
-            return ResponseEntity.badRequest().body(new MessageResponse("User is already verified!"));
-        }
-
         try {
+            if (userService.userIsVerified(email)) {
+                return ResponseEntity.badRequest().body(new MessageResponse("User is already verified!"));
+            }
+
             authService.resendVerificationEmail(email);
         } catch (MessagingException e) {
             return ResponseEntity.badRequest().body(new MessageResponse("Email could not be sent!"));
