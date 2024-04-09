@@ -17,8 +17,11 @@ public class EmailConfig {
     @Autowired
     private TemplateEngine templateEngine;
 
+    @Autowired
+    private String defaultSender = "Shordem Blog <shordem@horlakz.com>";
+
     @Bean
     public EmailService emailService() {
-        return new EmailService(javaMailSender, templateEngine);
+        return new EmailService(defaultSender, javaMailSender, templateEngine);
     }
 }
