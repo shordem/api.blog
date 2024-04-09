@@ -30,6 +30,10 @@ jobs:
           envkey_AWS_REGION: ${{ secrets.AWS_REGION }}
           envkey_AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
           envkey_AWS_BASE_FOLDER: ${{ secrets.AWS_BASE_FOLDER }}
+          envkey_EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          envkey_EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          envkey_EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+          envkey_EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
       - name: Set up jdk 17
         uses: actions/setup-java@v4
