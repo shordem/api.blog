@@ -38,6 +38,12 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final EmailService emailService;
 
+    private String codeNotExistsForUserMessage = "User has not requested for a code yet";
+
+    private String hashPassword(String password) {
+        return encoder.encode(password);
+    }
+
     private String generateCode(User user) {
         Code code = new Code();
         String otp = StringHelper.otpGenerator();
@@ -68,6 +74,35 @@ public class AuthService {
         return codeEntityOptional;
     }
 
+    private void deleteCode(Code code) {
+        code.delete();
+        codeRepository.save(code);
+    }
+
+    private void resendEmail(String email, String type)
+            throws MessagingException, RuntimeException, EntityNotFoundException {
+        User user = userService.findByEmail(email);
+
+        Code existingCode = codeRepository.findByUserIdAndDeletedAtIsNull(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException(codeNotExistsForUserMessage));
+
+        deleteCode(existingCode);
+
+        String code = generateCode(user);
+
+        switch (type) {
+            case "confirm-email":
+                sendMail(code, user, "confirm-email", "Confirm Your Email");
+                break;
+            case "reset-password":
+                sendMail(code, user, "reset-password", "Reset Your Password");
+                break;
+            default:
+                throw new RuntimeException("Invalid Email type");
+        }
+
+    }
+
     public String login(String email, String password) {
 
         User user = userService.findByEmail(email);
@@ -95,7 +130,7 @@ public class AuthService {
 
         user.setUsername(StringHelper.lowerCase(username));
         user.setEmail(email);
-        user.setPassword(encoder.encode(password));
+        user.setPassword(hashPassword(password));
         user.setIsEmailVerified(false);
         user.setRoles(roles);
 
@@ -110,23 +145,8 @@ public class AuthService {
 
     public void resendVerificationEmail(String email)
             throws MessagingException, RuntimeException, EntityNotFoundException {
-        User user = userService.findByEmail(email);
 
-        if (user.getIsEmailVerified()) {
-            throw new RuntimeException("User is already verified!");
-        }
-
-        Code existingCode = codeRepository.findByUserIdAndDeletedAtIsNull(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Code not found"));
-
-        if (existingCode != null) {
-            existingCode.delete();
-            codeRepository.save(existingCode);
-        }
-
-        String code = generateCode(user);
-        sendMail(code, user, "confirm-email", "Confirm Your Email");
-
+        resendEmail(email, "confirm-email");
     }
 
     public void verifyEmail(String code) {
@@ -142,21 +162,30 @@ public class AuthService {
     }
 
     public void forgotPassword(String email) throws MessagingException {
-        User user = userService.findByEmail(email);
 
-        String code = generateCode(user);
-        sendMail(code, user, "reset-password", "Reset Your Password");
+        try {
+            resendEmail(email, "reset-password");
+        } catch (EntityNotFoundException e) {
+            if (codeNotExistsForUserMessage.equals(e.getMessage())) {
+                User user = userService.findByEmail(email);
+                String code = generateCode(user);
+
+                sendMail(code, user, "reset-password", "Reset Your Password");
+            } else {
+                throw e;
+            }
+        }
     }
 
     public void resetPassword(String email, String code, String password) {
         Code codeEntity = getCodeEntity(code);
         User user = codeEntity.getUser();
 
-        if (!user.getEmail().equals(email)) {
-            throw new RuntimeException("Email is not valid!");
+        if (user.getEmail().equals(email) == false) {
+            throw new RuntimeException("Code is not valid!");
         }
 
-        user.setPassword(encoder.encode(password));
+        user.setPassword(hashPassword(password));
         userService.save(user);
 
         codeEntity.delete();
