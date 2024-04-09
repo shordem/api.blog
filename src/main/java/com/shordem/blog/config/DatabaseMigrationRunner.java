@@ -16,7 +16,10 @@ import com.shordem.blog.exception.EntityNotFoundException;
 import com.shordem.blog.service.RoleService;
 import com.shordem.blog.service.UserService;
 
+import jakarta.transaction.Transactional;
+
 @Component
+@Transactional
 public class DatabaseMigrationRunner implements CommandLineRunner {
 
     @Autowired
