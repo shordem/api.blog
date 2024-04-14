@@ -32,7 +32,7 @@ public class AwsS3Service {
     private String baseFolder;
 
     @Async
-    public String uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(MultipartFile multipartFile) throws IOException, AmazonServiceException {
         LOGGER.info("File upload in progress.");
         File file = convertMultiPartFileToFile(multipartFile);
 
@@ -45,17 +45,20 @@ public class AwsS3Service {
             LOGGER.info("File upload is failed.");
             LOGGER.error("Error= {} while uploading file.", ex.getMessage());
             file.delete();
-            return "File upload is failed." + ex.getMessage();
+
+            throw ex;
         }
 
     }
 
-    private File convertMultiPartFileToFile(MultipartFile multipartFile) {
+    private File convertMultiPartFileToFile(MultipartFile multipartFile) throws IOException {
         File file = new File(multipartFile.getOriginalFilename());
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(multipartFile.getBytes());
         } catch (IOException e) {
             LOGGER.error("Error converting multipartFile to file", e.getMessage());
+
+            throw e;
         }
 
         return file;
