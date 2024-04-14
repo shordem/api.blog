@@ -34,4 +34,7 @@ public class ProfileRequest {
     @Size(min = 6, max = 40)
     private String instagram;
 
+    @NotBlank
+    private String avatar;
+
 }
