@@ -12,6 +12,7 @@ import com.shordem.blog.dto.RoleDto;
 import com.shordem.blog.dto.UserDto;
 import com.shordem.blog.entity.Profile;
 import com.shordem.blog.entity.User;
+import com.shordem.blog.payload.request.ProfileRequest;
 import com.shordem.blog.repository.ProfileRepository;
 
 import jakarta.transaction.Transactional;
@@ -20,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ProfileService extends BaseService<Profile> {
+public class ProfileService {
 
     private final ProfileRepository profileRepository;
 
@@ -44,9 +45,38 @@ public class ProfileService extends BaseService<Profile> {
         return profileRepository.findByCreatedById(userId);
     }
 
-    @Override
-    public void save(Profile entity) {
+    public void createProfile(ProfileRequest profileRequest, User user) {
+
+        Profile entity = new Profile();
+
+        entity.setFirstName(profileRequest.getFirstName());
+        entity.setLastName(profileRequest.getLastName());
+        entity.setBio(profileRequest.getBio());
+        entity.setAvatar(profileRequest.getAvatar());
+        entity.setWebsite(profileRequest.getWebsite());
+        entity.setMail(profileRequest.getMail());
+        entity.setX(profileRequest.getX());
+        entity.setFacebook(profileRequest.getFacebook());
+        entity.setInstagram(profileRequest.getInstagram());
+        entity.setCreatedBy(user);
+
         profileRepository.save(entity);
+    }
+
+    public void updateProfile(Profile profile, ProfileRequest profileRequest) {
+
+        profile.setFirstName(profileRequest.getFirstName());
+        profile.setLastName(profileRequest.getLastName());
+        profile.setBio(profileRequest.getBio());
+        profile.setAvatar(profileRequest.getAvatar());
+        profile.setWebsite(profileRequest.getWebsite());
+        profile.setMail(profileRequest.getMail());
+        profile.setX(profileRequest.getX());
+        profile.setFacebook(profileRequest.getFacebook());
+        profile.setInstagram(profileRequest.getInstagram());
+        profile.setUpdatedBy(profile.getCreatedBy());
+
+        profileRepository.save(profile);
     }
 
     public Boolean existsByUserId(UUID userId) {
