@@ -6,6 +6,7 @@ import lombok.Data;
 public class PostDto {
 
     private String slug;
+    private String thumbnail;
     private String title;
     private String content;
     private TagDto[] tags;

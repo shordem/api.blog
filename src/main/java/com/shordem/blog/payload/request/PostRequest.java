@@ -7,6 +7,9 @@ import lombok.Getter;
 public class PostRequest {
 
     @NotNull
+    private String thumbnail;
+
+    @NotNull
     private String title;
 
     @NotNull

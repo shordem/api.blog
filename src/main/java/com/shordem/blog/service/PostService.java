@@ -38,6 +38,7 @@ public class PostService {
 
         PostDto postDto = new PostDto();
         postDto.setSlug(post.getSlug());
+        postDto.setThumbnail(post.getThumbnail());
         postDto.setTitle(post.getTitle());
         postDto.setContent(post.getContent());
         postDto.setTags(tagDtos);
@@ -56,6 +57,7 @@ public class PostService {
     public void createBlog(PostRequest postRequest, User user) {
         Post post = new Post();
 
+        String thumbnail = postRequest.getThumbnail();
         String title = postRequest.getTitle();
         String content = postRequest.getContent();
         String[] tags = postRequest.getTags();
@@ -63,6 +65,7 @@ public class PostService {
         Set<Tag> tagSet = tagService.findAllBySlugIn(tags);
 
         post.setSlug(slug);
+        post.setThumbnail(thumbnail);
         post.setTitle(title);
         post.setContent(content);
         post.setTags(tagSet);

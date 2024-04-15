@@ -41,6 +41,10 @@ public class Post extends Base implements Serializable {
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<Comment> comments = new ArrayList<>();
 
+    @NotNull
+    @Column
+    private String thumbnail;
+
     @NotBlank(message = "Title is required")
     @Size(min = 3, max = 255, message = "Title must be between 3 and 255 characters")
     @NotNull
