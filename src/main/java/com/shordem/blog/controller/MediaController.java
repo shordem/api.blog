@@ -24,7 +24,7 @@ public class MediaController {
     private final MediaService mediaService;
 
     @PostMapping(value = "/upload/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> doUploadFile(@RequestParam(required = true, name = "file") MultipartFile file)
+    public ResponseEntity<MediaResponse> doUploadFile(@RequestParam(required = true, name = "file") MultipartFile file)
             throws AmazonServiceException, IOException {
 
         String fileKey = mediaService.uploadFile(file);
