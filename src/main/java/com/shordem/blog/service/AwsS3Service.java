@@ -16,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 
 @Service
 public class AwsS3Service {
@@ -30,6 +32,13 @@ public class AwsS3Service {
 
     @Value("${shordem.aws.baseFolder}")
     private String baseFolder;
+
+    public byte[] getFile(String key) throws IOException {
+        GetObjectRequest getObjectRequest = new GetObjectRequest(bucket, this.filePath(key));
+        S3Object object = s3Client.getObject(getObjectRequest);
+
+        return object.getObjectContent().readAllBytes();
+    }
 
     @Async
     public String uploadFile(MultipartFile multipartFile) throws IOException, AmazonServiceException {
@@ -51,6 +60,10 @@ public class AwsS3Service {
 
     }
 
+    private String filePath(String key) {
+        return baseFolder + "/" + key;
+    }
+
     private File convertMultiPartFileToFile(MultipartFile multipartFile) throws IOException {
         File file = new File(multipartFile.getOriginalFilename());
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
@@ -68,7 +81,7 @@ public class AwsS3Service {
         String fileExt = StringUtils.getFilenameExtension(file.getName());
         String key = UUID.randomUUID().toString() + "." + fileExt;
         LOGGER.info("Uploading file with name= " + key);
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, baseFolder + "/" + key, file);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, this.filePath(key), file);
         s3Client.putObject(putObjectRequest);
         return key;
     }
