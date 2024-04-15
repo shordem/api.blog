@@ -66,6 +66,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/tag/").hasRole(ERole.ADMIN.name())
                                 .requestMatchers("/profile/").hasRole(ERole.USER.name())
                                 .requestMatchers("/post/").hasRole(ERole.USER.name())
+                                .requestMatchers("/bookmark/").hasRole(ERole.USER.name())
                                 .requestMatchers(HttpMethod.POST, "/media/").hasRole(ERole.USER.name())
                                 .anyRequest().permitAll())
                 .exceptionHandling(exception -> {
