@@ -20,4 +20,8 @@ public class MediaService {
     public String uploadFile(MultipartFile file) throws AmazonServiceException, IOException {
         return awsS3Service.uploadFile(file);
     }
+
+    public byte[] getFile(String key) throws IOException {
+        return awsS3Service.getFile(key);
+    }
 }
