@@ -33,7 +33,7 @@ public class ProfileRequest {
     @Size(max = 50)
     private String instagram;
 
-    @Size(max = 42)
+    @Size(max = 100)
     private String avatar;
 
 }
