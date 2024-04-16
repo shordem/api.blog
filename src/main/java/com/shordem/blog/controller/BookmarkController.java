@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shordem.blog.entity.Bookmark;
+import com.shordem.blog.dto.PostDto;
 import com.shordem.blog.entity.Post;
 import com.shordem.blog.entity.User;
 import com.shordem.blog.payload.response.MessageResponse;
@@ -61,10 +61,10 @@ public class BookmarkController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getBookmarks(Pageable pageable) {
+    public ResponseEntity<Page<PostDto>> getBookmarks(Pageable pageable) {
         User user = userDetailsService.getAuthenticatedUser();
 
-        Page<Bookmark> bookmarks = bookmarkService.findAllByUser(user, pageable);
+        Page<PostDto> bookmarks = bookmarkService.findAllByUser(user, pageable);
 
         return ResponseEntity.ok().body(bookmarks);
     }
