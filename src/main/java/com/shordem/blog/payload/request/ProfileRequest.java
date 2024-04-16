@@ -8,33 +8,32 @@ import lombok.Getter;
 public class ProfileRequest {
 
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 50)
     private String firstName;
 
     @NotBlank
     @Size(max = 50)
     private String lastName;
 
-    @NotBlank
-    @Size(min = 6, max = 512)
+    @Size(max = 500)
     private String bio;
 
-    @Size(min = 6, max = 40)
+    @Size(max = 50)
     private String website;
 
-    @Size(min = 6, max = 40)
+    @Size(max = 50)
     private String mail;
 
-    @Size(min = 6, max = 40)
+    @Size(max = 50)
     private String x;
 
-    @Size(min = 6, max = 40)
+    @Size(max = 50)
     private String facebook;
 
-    @Size(min = 6, max = 40)
+    @Size(max = 50)
     private String instagram;
 
-    @NotBlank
+    @Size(max = 42)
     private String avatar;
 
 }
