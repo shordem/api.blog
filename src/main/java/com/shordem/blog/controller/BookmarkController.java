@@ -22,7 +22,7 @@ import com.shordem.blog.service.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/bookmark/")
+@RequestMapping("/bookmarks/")
 @RequiredArgsConstructor
 public class BookmarkController {
 
