@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.shordem.blog.dto.PostDto;
 import com.shordem.blog.entity.Bookmark;
 import com.shordem.blog.entity.Post;
 import com.shordem.blog.entity.User;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
+    private final PostService postService;
 
     public void addBookmark(Post post, User user) {
         Bookmark bookmark = new Bookmark();
@@ -40,9 +42,12 @@ public class BookmarkService {
         return bookmarkRepository.existsByPostAndUser(post, user);
     }
 
-    public Page<Bookmark> findAllByUser(User user, Pageable pageable) {
+    public Page<PostDto> findAllByUser(User user, Pageable pageable) {
         List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(pageable, user).getContent();
+        List<PostDto> postDtos = bookmarks.stream()
+                .map(bookmark -> postService.convertToDto(bookmark.getPost()))
+                .toList();
 
-        return new PageImpl<>(bookmarks, pageable, bookmarks.size());
+        return new PageImpl<>(postDtos, pageable, postDtos.size());
     }
 }
