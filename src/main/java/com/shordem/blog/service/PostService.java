@@ -30,7 +30,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final TagService tagService;
 
-    private PostDto convertToDto(Post post) {
+    public PostDto convertToDto(Post post) {
         Set<Tag> tags = post.getTags();
         TagDto[] tagDtos = tags.stream()
                 .map(tag -> new TagDto(tag.getName(), tag.getSlug(), tag.getImage(), tag.getDescription()))
