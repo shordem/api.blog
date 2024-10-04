@@ -51,10 +51,11 @@ public class AuthController {
     }
 
     @PostMapping("/login/")
-    public ResponseEntity<?> doLogin(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> doLogin(@Valid @RequestBody LoginRequest loginRequest) throws RuntimeException {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
 
+        // refactor
         if (userService.userIsVerified(email) == false) {
             return ResponseEntity.badRequest().body(new MessageResponse("User is not verified!"));
         }
