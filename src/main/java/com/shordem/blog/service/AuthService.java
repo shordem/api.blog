@@ -44,6 +44,10 @@ public class AuthService {
         return encoder.encode(password);
     }
 
+    private Boolean comparePassword(String password, String encodedPassword) {
+        return encoder.matches(password, encodedPassword);
+    }
+
     private String generateCode(User user) {
         Code code = new Code();
         String otp = StringHelper.otpGenerator();
@@ -103,13 +107,19 @@ public class AuthService {
 
     }
 
-    public String login(String email, String password) {
+    public String login(String email, String password) throws RuntimeException {
 
         User user = userService.findByEmail(email);
         String username = user.getUsername();
 
+        Boolean isPasswordMatch = this.comparePassword(password, user.getPassword());
+
+        if (isPasswordMatch == false) {
+            throw new RuntimeException("Invalid Password");
+        }
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-                password);
+                user.toString());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
